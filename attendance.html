@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Attendance App</title>
+
+    <!-- Chart.js for graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: #121212;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .box {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 15px;
+            width: 320px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #00c6ff;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00a3cc;
+        }
+
+        #result {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>📊 Smart Attendance</h2>
+
+    <input type="number" id="total" placeholder="Total Classes">
+    <input type="number" id="attended" placeholder="Attended Classes">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+
+    <canvas id="chart"></canvas>
+</div>
+
+<script>
+let chart;
+
+function calculate() {
+    let total = parseInt(document.getElementById("total").value);
+    let attended = parseInt(document.getElementById("attended").value);
+
+    if (isNaN(total) || isNaN(attended) || total <= 0 || attended > total) {
+        alert("Enter valid inputs!");
+        return;
+    }
+
+    let percentage = (attended / total) * 100;
+
+    let day1 = ((attended + 6) / (total + 6)) * 100;
+    let day10 = ((attended + 60) / (total + 60)) * 100;
+
+    // Days to reach 75%
+    let days = 0;
+    while (true) {
+        let future = ((attended + 6*days) / (total + 6*days)) * 100;
+        if (future >= 75) break;
+        days++;
+    }
+
+    // Bunk days
+    let bunk = 0;
+    while (true) {
+        let future = (attended / (total + 6*bunk)) * 100;
+        if (future < 75) break;
+        bunk++;
+    }
+
+    document.getElementById("result").innerHTML =
+        `<b>Current:</b> ${percentage.toFixed(2)}%<br>
+         <b>After 1 Day:</b> ${day1.toFixed(2)}%<br>
+         <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
+         <b>Days to reach 75%:</b> ${days}<br>
+         <b>Bunk Allowed:</b> ${bunk - 1}`;
+
+    // GRAPH DATA
+    let daysArr = [];
+    let percentArr = [];
+
+    for (let i = 0; i <= 30; i++) {
+        let future = ((attended + 6*i) / (total + 6*i)) * 100;
+        daysArr.push(i);
+        percentArr.push(future.toFixed(2));
+    }
+
+    // Destroy old chart
+    if (chart) chart.destroy();
+
+    // Create new chart
+    let ctx = document.getElementById('chart').getContext('2d');
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: daysArr,
+            datasets: [{
+                label: 'Attendance %',
+                data: percentArr,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+}
+</script>
+
+</body>
+</html>
