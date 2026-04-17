@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00c6ff">
     <title>Smart Attendance App</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -193,6 +195,9 @@ function calculate() {
             }]
         }
     });
+}
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
