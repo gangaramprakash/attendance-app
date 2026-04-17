@@ -2,8 +2,6 @@
 <html>
 <head>
     <title>Smart Attendance App</title>
-
-    <!-- Chart.js for graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -19,7 +17,7 @@
             background: #1e1e1e;
             padding: 25px;
             border-radius: 15px;
-            width: 320px;
+            width: 340px;
             margin: auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
@@ -39,10 +37,6 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #00a3cc;
         }
 
         #result {
@@ -74,12 +68,27 @@
 <script>
 let chart;
 
+// ✅ WORKING DAYS FUNCTION (SKIP SUNDAYS)
+function addWorkingDays(startDate, daysToAdd) {
+    let date = new Date(startDate);
+    let addedDays = 0;
+
+    while (addedDays < daysToAdd) {
+        date.setDate(date.getDate() + 1);
+
+        if (date.getDay() !== 0) { // skip Sunday
+            addedDays++;
+        }
+    }
+    return date;
+}
+
 function calculate() {
     let total = parseInt(document.getElementById("total").value);
     let attended = parseInt(document.getElementById("attended").value);
 
     if (isNaN(total) || isNaN(attended) || total <= 0 || attended > total) {
-        alert("Enter valid inputs!");
+        alert("⚠️ Please enter valid inputs!");
         return;
     }
 
@@ -96,6 +105,22 @@ function calculate() {
         days++;
     }
 
+    let classesNeeded = days * 6;
+
+    let reachText = "";
+    if (percentage >= 75) {
+        reachText = "Already above 75% 😎";
+    } else {
+        reachText = `${days} days (${classesNeeded} classes)`;
+    }
+
+    // 📅 Working Date Calculation
+    let today = new Date();
+    let targetDate = addWorkingDays(today, days);
+
+    let options = { day: 'numeric', month: 'long', year: 'numeric' };
+    let finalDate = targetDate.toLocaleDateString('en-IN', options);
+
     // Bunk days
     let bunk = 0;
     while (true) {
@@ -104,14 +129,47 @@ function calculate() {
         bunk++;
     }
 
+    // ❌ Absent Today Feature
+    let absentTotal = total + 6;
+    let absentPercentage = (attended / absentTotal) * 100;
+
+    let absentDays = 0;
+    while (true) {
+        let future = ((attended + 6*absentDays) / (absentTotal + 6*absentDays)) * 100;
+        if (future >= 75) break;
+        absentDays++;
+    }
+
+    let absentClasses = absentDays * 6;
+
+    // 😄 SWEET WARNINGS
+    let warning = "";
+    if (percentage < 75) {
+        warning = "⚠️ Bro attend classes 😅 you're below 75%!";
+    } else if (percentage < 80) {
+        warning = "🙂 Safe but don’t bunk too much!";
+    } else {
+        warning = "😎 Chill bro, you're in safe zone!";
+    }
+
+    // OUTPUT
     document.getElementById("result").innerHTML =
         `<b>Current:</b> ${percentage.toFixed(2)}%<br>
-         <b>After 1 Day:</b> ${day1.toFixed(2)}%<br>
+         <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
          <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
-         <b>Days to reach 75%:</b> ${days}<br>
-         <b>Bunk Allowed:</b> ${bunk - 1}`;
+         <b>To Reach 75%:</b> ${reachText}<br>
+         <b>📅 Target Date:</b> ${finalDate}<br>
+         <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
 
-    // GRAPH DATA
+         <hr>
+
+         <b>❌ If Absent Today:</b><br>
+         <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
+         <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
+
+         <b>${warning}</b>`;
+
+    // GRAPH
     let daysArr = [];
     let percentArr = [];
 
@@ -121,10 +179,8 @@ function calculate() {
         percentArr.push(future.toFixed(2));
     }
 
-    // Destroy old chart
     if (chart) chart.destroy();
 
-    // Create new chart
     let ctx = document.getElementById('chart').getContext('2d');
     chart = new Chart(ctx, {
         type: 'line',
@@ -135,9 +191,6 @@ function calculate() {
                 data: percentArr,
                 borderWidth: 2
             }]
-        },
-        options: {
-            responsive: true
         }
     });
 }
