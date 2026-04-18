@@ -111,17 +111,20 @@ if (!isNaN(bunkInput) && bunkInput >= 0) {
                   New Attendance: ${newPercentage.toFixed(2)}%`;
 
     // 🔥 RECOVERY AFTER BUNK (CORRECT PLACE)
-    let recoveryDays = 0;
+   let recoveryClasses = 0;
 
-    while (true) {
-        let future = ((attended + 6*recoveryDays) / (newTotal + 6*recoveryDays)) * 100;
-        if (future >= 75) break;
-        recoveryDays++;
-    }
+while (true) {
+    let future = ((attended + recoveryClasses) / (newTotal + recoveryClasses)) * 100;
+    if (future >= 75) break;
+    recoveryClasses++;
+}
 
-    let recoveryClasses = recoveryDays * 6;
+// convert to days (optional)
+let recoveryDays = (recoveryClasses / 6).toFixed(2);
 
-    bunkResult += `<br><b>To recover 75%:</b> ${recoveryDays} days (${recoveryClasses} classes)`;
+    bunkResult += `<br><b>To recover 75%:</b><br>
+Classes: ${recoveryClasses}<br>
+Days: ${recoveryDays}`;
 }
     // ✅ ADD THIS BLOCK (MISSING LOGIC)
 
@@ -169,14 +172,15 @@ let maxSafeClasses = maxSafeBunk * 6;
     let absentTotal = total + 6;
     let absentPercentage = (attended / absentTotal) * 100;
 
-    let absentDays = 0;
-    while (true) {
-        let future = ((attended + 6*absentDays) / (absentTotal + 6*absentDays)) * 100;
-        if (future >= 75) break;
-        absentDays++;
-    }
+   let absentClasses = 0;
 
-    let absentClasses = absentDays * 6;
+while (true) {
+    let future = ((attended + absentClasses) / (absentTotal + absentClasses)) * 100;
+    if (future >= 75) break;
+    absentClasses++;
+}
+
+let absentDays = (absentClasses / 6).toFixed(2);
 
     // Warning
     let warning = "";
