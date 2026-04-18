@@ -160,6 +160,8 @@ while (true) {
     let future = (attended / (total + 6*bunk)) * 100;
     if (future < 75) break;
     bunk++;
+    let maxSafeBunk = bunk - 1;
+let maxSafeClasses = maxSafeBunk * 6;
 }
     // Absent
     let absentTotal = total + 6;
@@ -201,6 +203,7 @@ while (true) {
 
          <b>${warning}</b>`
         + bunkResult;
+    <b>🧠 Max Safe Bunk:</b> ${maxSafeBunk} days (${maxSafeClasses} classes)<br>
 
     // GRAPH (unchanged)
     let daysArr = [];
