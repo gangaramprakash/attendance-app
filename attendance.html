@@ -160,9 +160,11 @@ while (true) {
     let future = (attended / (total + 6*bunk)) * 100;
     if (future < 75) break;
     bunk++;
-    let maxSafeBunk = bunk - 1;
-let maxSafeClasses = maxSafeBunk * 6;
 }
+
+// ✅ ADD HERE (OUTSIDE LOOP)
+let maxSafeBunk = bunk - 1;
+let maxSafeClasses = maxSafeBunk * 6;
     // Absent
     let absentTotal = total + 6;
     let absentPercentage = (attended / absentTotal) * 100;
@@ -188,23 +190,22 @@ let maxSafeClasses = maxSafeBunk * 6;
 
     // OUTPUT
     document.getElementById("result").innerHTML =
-        `<b>Current:</b> ${percentage.toFixed(2)}%<br>
-         <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
-         <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
-         <b>To Reach 75%:</b> ${reachText}<br>
-         <b>📅 Target Date:</b> ${finalDate}<br>
-         <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
+    `<b>Current:</b> ${percentage.toFixed(2)}%<br>
+     <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
+     <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
+     <b>To Reach 75%:</b> ${reachText}<br>
+     <b>📅 Target Date:</b> ${finalDate}<br>
+     <b>Bunk Allowed:</b> ${bunk - 1} days<br>
+     <b>🧠 Max Safe Bunk:</b> ${maxSafeBunk} days (${maxSafeClasses} classes)<br><br>
 
-         <hr>
+     <hr>
 
-         <b>❌ If Absent Today:</b><br>
-         <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
-         <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
+     <b>❌ If Absent Today:</b><br>
+     <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
+     <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
 
-         <b>${warning}</b>`
-        + bunkResult;
-    <b>🧠 Max Safe Bunk:</b> ${maxSafeBunk} days (${maxSafeClasses} classes)<br>
-
+     <b>${warning}</b>`
+    + bunkResult;
     // GRAPH (unchanged)
     let daysArr = [];
     let percentArr = [];
