@@ -91,22 +91,23 @@ function calculate() {
     if (isNaN(total) || isNaN(attended) || total <= 0 || attended > total) {
         alert("⚠️ Please enter valid inputs!");
         return;
-        // 🔥 CUSTOM BUNK FEATURE
-let bunkInput = parseInt(document.getElementById("bunkDays").value);
-
-let bunkResult = "";
-
-if (!isNaN(bunkInput) && bunkInput >= 0) {
-    let newTotal = total + (6 * bunkInput);
-    let newPercentage = (attended / newTotal) * 100;
-
-    bunkResult = `<br><br><b>📉 If you bunk ${bunkInput} days:</b><br>
-                  New Attendance: ${newPercentage.toFixed(2)}%`;
-}
-        // 💾 SAVE DATA
-localStorage.setItem("total", total);
-localStorage.setItem("attended", attended);
     }
+
+    // ✅ MOVE BUNK FEATURE HERE (CORRECT PLACE)
+    let bunkInput = parseInt(document.getElementById("bunkDays").value);
+    let bunkResult = "";
+
+    if (!isNaN(bunkInput) && bunkInput >= 0) {
+        let newTotal = total + (6 * bunkInput);
+        let newPercentage = (attended / newTotal) * 100;
+
+        bunkResult = `<br><br><b>📉 If you bunk ${bunkInput} days:</b><br>
+                      New Attendance: ${newPercentage.toFixed(2)}%`;
+    }
+
+    // ✅ SAVE DATA (CORRECT PLACE)
+    localStorage.setItem("total", total);
+    localStorage.setItem("attended", attended);
 
     let percentage = (attended / total) * 100;
 
@@ -130,14 +131,14 @@ localStorage.setItem("attended", attended);
         reachText = `${days} days (${classesNeeded} classes)`;
     }
 
-    // 📅 Working Date Calculation
+    // Working date
     let today = new Date();
     let targetDate = addWorkingDays(today, days);
 
     let options = { day: 'numeric', month: 'long', year: 'numeric' };
     let finalDate = targetDate.toLocaleDateString('en-IN', options);
 
-    // Bunk days
+    // Bunk allowed
     let bunk = 0;
     while (true) {
         let future = (attended / (total + 6*bunk)) * 100;
@@ -145,7 +146,7 @@ localStorage.setItem("attended", attended);
         bunk++;
     }
 
-    // ❌ Absent Today Feature
+    // Absent
     let absentTotal = total + 6;
     let absentPercentage = (attended / absentTotal) * 100;
 
@@ -158,7 +159,7 @@ localStorage.setItem("attended", attended);
 
     let absentClasses = absentDays * 6;
 
-    // 😄 SWEET WARNINGS
+    // Warning
     let warning = "";
     if (percentage < 75) {
         warning = "⚠️ Bro attend classes 😅 you're below 75%!";
@@ -169,24 +170,24 @@ localStorage.setItem("attended", attended);
     }
 
     // OUTPUT
-document.getElementById("result").innerHTML =
-    `<b>Current:</b> ${percentage.toFixed(2)}%<br>
-     <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
-     <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
-     <b>To Reach 75%:</b> ${reachText}<br>
-     <b>📅 Target Date:</b> ${finalDate}<br>
-     <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
+    document.getElementById("result").innerHTML =
+        `<b>Current:</b> ${percentage.toFixed(2)}%<br>
+         <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
+         <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
+         <b>To Reach 75%:</b> ${reachText}<br>
+         <b>📅 Target Date:</b> ${finalDate}<br>
+         <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
 
-     <hr>
+         <hr>
 
-     <b>❌ If Absent Today:</b><br>
-     <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
-     <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
+         <b>❌ If Absent Today:</b><br>
+         <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
+         <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
 
-     <b>${warning}</b>`
-     + bunkResult;
+         <b>${warning}</b>`
+        + bunkResult;
 
-    // GRAPH
+    // GRAPH (unchanged)
     let daysArr = [];
     let percentArr = [];
 
