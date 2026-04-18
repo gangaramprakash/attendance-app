@@ -91,6 +91,21 @@ function calculate() {
     if (isNaN(total) || isNaN(attended) || total <= 0 || attended > total) {
         alert("⚠️ Please enter valid inputs!");
         return;
+        // 🔥 CUSTOM BUNK FEATURE
+let bunkInput = parseInt(document.getElementById("bunkDays").value);
+
+let bunkResult = "";
+
+if (!isNaN(bunkInput) && bunkInput >= 0) {
+    let newTotal = total + (6 * bunkInput);
+    let newPercentage = (attended / newTotal) * 100;
+
+    bunkResult = `<br><br><b>📉 If you bunk ${bunkInput} days:</b><br>
+                  New Attendance: ${newPercentage.toFixed(2)}%`;
+}
+        // 💾 SAVE DATA
+localStorage.setItem("total", total);
+localStorage.setItem("attended", attended);
     }
 
     let percentage = (attended / total) * 100;
@@ -154,21 +169,22 @@ function calculate() {
     }
 
     // OUTPUT
-    document.getElementById("result").innerHTML =
-        `<b>Current:</b> ${percentage.toFixed(2)}%<br>
-         <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
-         <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
-         <b>To Reach 75%:</b> ${reachText}<br>
-         <b>📅 Target Date:</b> ${finalDate}<br>
-         <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
+document.getElementById("result").innerHTML =
+    `<b>Current:</b> ${percentage.toFixed(2)}%<br>
+     <b>After 1 Day (Present):</b> ${day1.toFixed(2)}%<br>
+     <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
+     <b>To Reach 75%:</b> ${reachText}<br>
+     <b>📅 Target Date:</b> ${finalDate}<br>
+     <b>Bunk Allowed:</b> ${bunk - 1} days<br><br>
 
-         <hr>
+     <hr>
 
-         <b>❌ If Absent Today:</b><br>
-         <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
-         <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
+     <b>❌ If Absent Today:</b><br>
+     <b>New Attendance:</b> ${absentPercentage.toFixed(2)}%<br>
+     <b>To Recover:</b> ${absentDays} days (${absentClasses} classes)<br><br>
 
-         <b>${warning}</b>`;
+     <b>${warning}</b>`
+     + bunkResult;
 
     // GRAPH
     let daysArr = [];
@@ -221,6 +237,16 @@ document.getElementById("installBtn").addEventListener("click", async () => {
         deferredPrompt = null;
     }
 });
+    // 🔄 LOAD SAVED DATA
+window.onload = function() {
+    let savedTotal = localStorage.getItem("total");
+    let savedAttended = localStorage.getItem("attended");
+
+    if (savedTotal && savedAttended) {
+        document.getElementById("total").value = savedTotal;
+        document.getElementById("attended").value = savedAttended;
+    }
+};
 </script>
 
 </body>
