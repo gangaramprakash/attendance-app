@@ -144,6 +144,18 @@ function calculate() {
         let future = (attended / (total + 6*bunk)) * 100;
         if (future < 75) break;
         bunk++;
+        // 🔥 RECOVERY AFTER BUNK
+let recoveryDays = 0;
+
+while (true) {
+    let future = ((attended + 6*recoveryDays) / (newTotal + 6*recoveryDays)) * 100;
+    if (future >= 75) break;
+    recoveryDays++;
+}
+
+let recoveryClasses = recoveryDays * 6;
+
+bunkResult += `<br><b>To recover 75%:</b> ${recoveryDays} days (${recoveryClasses} classes)`;
     }
 
     // Absent
