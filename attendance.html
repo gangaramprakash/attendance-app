@@ -118,6 +118,44 @@ if (!isNaN(bunkInput) && bunkInput >= 0) {
 
     bunkResult += `<br><b>To recover 75%:</b> ${recoveryDays} days (${recoveryClasses} classes)`;
 }
+    // ✅ ADD THIS BLOCK (MISSING LOGIC)
+
+let percentage = (attended / total) * 100;
+
+let day1 = ((attended + 6) / (total + 6)) * 100;
+let day10 = ((attended + 60) / (total + 60)) * 100;
+
+// Days to reach 75%
+let days = 0;
+while (true) {
+    let future = ((attended + 6*days) / (total + 6*days)) * 100;
+    if (future >= 75) break;
+    days++;
+}
+
+let classesNeeded = days * 6;
+
+let reachText = "";
+if (percentage >= 75) {
+    reachText = "Already above 75% 😎";
+} else {
+    reachText = `${days} days (${classesNeeded} classes)`;
+}
+
+// Working date
+let today = new Date();
+let targetDate = addWorkingDays(today, days);
+
+let options = { day: 'numeric', month: 'long', year: 'numeric' };
+let finalDate = targetDate.toLocaleDateString('en-IN', options);
+
+// Bunk allowed
+let bunk = 0;
+while (true) {
+    let future = (attended / (total + 6*bunk)) * 100;
+    if (future < 75) break;
+    bunk++;
+}
     // Absent
     let absentTotal = total + 6;
     let absentPercentage = (attended / absentTotal) * 100;
