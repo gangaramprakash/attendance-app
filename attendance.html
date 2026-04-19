@@ -157,13 +157,19 @@ let targetDate = addWorkingDays(today, days);
 let options = { day: 'numeric', month: 'long', year: 'numeric' };
 let finalDate = targetDate.toLocaleDateString('en-IN', options);
 
-// Bunk allowed
-let bunk = 0;
+let bunkClasses = 0;
+
 while (true) {
-    let future = (attended / (total + 6*bunk)) * 100;
+    let future = (attended / (total + bunkClasses)) * 100;
     if (future < 75) break;
-    bunk++;
+    bunkClasses++;
 }
+
+// exact safe classes
+let maxSafeClasses = bunkClasses - 1;
+
+// convert to days (optional)
+let maxSafeDays = (maxSafeClasses / 6).toFixed(2);
 
 // ✅ ADD HERE (OUTSIDE LOOP)
 let maxSafeBunk = bunk - 1;
@@ -199,7 +205,9 @@ let absentDays = (absentClasses / 6).toFixed(2);
      <b>After 10 Days:</b> ${day10.toFixed(2)}%<br>
      <b>To Reach 75%:</b> ${reachText}<br>
      <b>📅 Target Date:</b> ${finalDate}<br>
-     <b>Bunk Allowed:</b> ${bunk - 1} days<br>
+    <b>Bunk Allowed:</b><br>
+Classes: ${maxSafeClasses}<br>
+Days: ${maxSafeDays}
      <b>🧠 Max Safe Bunk:</b> ${maxSafeBunk} days (${maxSafeClasses} classes)<br><br>
 
      <hr>
