@@ -126,6 +126,18 @@ let recoveryDays = (recoveryClasses / 6).toFixed(2);
 Classes: ${recoveryClasses}<br>
 Days: ${(recoveryClasses / 6).toFixed(2)}`;
 }
+    // 🔥 EXACT BUNK ALLOWED (CLASS LEVEL)
+let bunkClasses = 0;
+
+while (true) {
+    let future = (attended / (total + bunkClasses)) * 100;
+    if (future < 75) break;
+    bunkClasses++;
+}
+
+// exact safe bunk
+let safeBunkClasses = bunkClasses - 1;
+let safeBunkDays = (safeBunkClasses / 6).toFixed(2);
     // ✅ ADD THIS BLOCK (MISSING LOGIC)
 
 let percentage = (attended / total) * 100;
@@ -202,7 +214,9 @@ let absentDays = (absentClasses / 6).toFixed(2);
 Classes: ${exactClasses}<br>
 Days: ${exactDays}<br>
      <b>📅 Target Date:</b> ${finalDate}<br>
-   
+   <b>Bunk Allowed:</b><br>
+Classes: ${safeBunkClasses}<br>
+Days: ${safeBunkDays}<br>
     
 
      <hr>
