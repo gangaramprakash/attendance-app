@@ -134,20 +134,21 @@ let day1 = ((attended + 6) / (total + 6)) * 100;
 let day10 = ((attended + 60) / (total + 60)) * 100;
 
 // Days to reach 75%
-let days = 0;
+let exactClasses = 0;
+
 while (true) {
-    let future = ((attended + 6*days) / (total + 6*days)) * 100;
+    let future = ((attended + exactClasses) / (total + exactClasses)) * 100;
     if (future >= 75) break;
-    days++;
+    exactClasses++;
 }
 
-let classesNeeded = days * 6;
+let exactDays = (exactClasses / 6).toFixed(2);
 
 let reachText = "";
 if (percentage >= 75) {
     reachText = "Already above 75% 😎";
 } else {
-    reachText = `${days} days (${classesNeeded} classes)`;
+    reachText = `Classes: ${exactClasses} | Days: ${exactDays}`;
 }
 
 // Working date
