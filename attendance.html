@@ -170,16 +170,6 @@ let targetDate = addWorkingDays(today, Math.ceil(exactClasses / 6));
 let options = { day: 'numeric', month: 'long', year: 'numeric' };
 let finalDate = targetDate.toLocaleDateString('en-IN', options);
 
-let bunkClasses = 0;
-
-while (true) {
-    let future = (attended / (total + bunkClasses)) * 100;
-    if (future < 75) break;
-    bunkClasses++;
-}
-
-
-
 
     // Absent
     let absentTotal = total + 6;
