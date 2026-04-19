@@ -171,9 +171,7 @@ let maxSafeClasses = bunkClasses - 1;
 // convert to days (optional)
 let maxSafeDays = (maxSafeClasses / 6).toFixed(2);
 
-// ✅ ADD HERE (OUTSIDE LOOP)
-let maxSafeBunk = bunk - 1;
-let maxSafeClasses = maxSafeBunk * 6;
+
     // Absent
     let absentTotal = total + 6;
     let absentPercentage = (attended / absentTotal) * 100;
@@ -208,7 +206,9 @@ let absentDays = (absentClasses / 6).toFixed(2);
     <b>Bunk Allowed:</b><br>
 Classes: ${maxSafeClasses}<br>
 Days: ${maxSafeDays}
-     <b>🧠 Max Safe Bunk:</b> ${maxSafeBunk} days (${maxSafeClasses} classes)<br><br>
+    <b>🧠 Max Safe Bunk:</b><br>
+Classes: ${maxSafeClasses}<br>
+Days: ${maxSafeDays}<br>
 
      <hr>
 
