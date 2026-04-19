@@ -153,7 +153,7 @@ if (percentage >= 75) {
 
 // Working date
 let today = new Date();
-let targetDate = addWorkingDays(today, days);
+let targetDate = addWorkingDays(today, Math.ceil(exactClasses / 6));
 
 let options = { day: 'numeric', month: 'long', year: 'numeric' };
 let finalDate = targetDate.toLocaleDateString('en-IN', options);
